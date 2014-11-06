@@ -1,53 +1,37 @@
 require 'open-uri'
 require 'json'
 require 'color'
-
 class Color < Thor
+
   include Thor::Actions
   argument :keywords, :desc => "Array of keywords to fetch a color theme", :type => :array
 
   desc "palette", "Write a scss color palette"
   def palette
-    combine_words = keywords.join('+').downcase
     url = 'http://www.colourlovers.com/api/palettes?keywords='+ keywords.join('+').downcase + '&format=json&orderCol=numViews&sortBy=DESC'
-    # puts url
-    page =open(url).read
-    json = JSON.parse(page)
+
+    json = JSON.parse(open(url).read)
     palettes = []
-
-    # p json.first
     input = ""
-    puts "\n< Enter > for more palettes from the same keyword(s)  - < q > to stop:"
-    puts
+    say(" < Enter > requests a new theme, < p + Enter > to get next permutation, < q > to quit:")
+    
     json.each do |entry|
-
-      p = entry["colors"]
-
-      name = combine_words.downcase.gsub(/\W+/,"")
-
-      p.permutation.each do |p|
-
-      puts "Title: " + entry["title"]
-      puts "User: " + entry["userName"]
-      puts
-      puts "Resultant SCSS-file:"
-      puts
-      text = "// Generated from the keyword(s): #{combine_words}\n"
       
-        p p
+      entry["colors"].permutation.each_with_index do |p,i|
+        text = "// Generated from the keyword(s): #{keywords.join(" ")}\n" + comment = "// Title: " + entry["title"] + "\n" + "// User: " + entry["userName"] + "\n" + "// Permutation:" + i.to_s + "\n"
+
         p.each_with_index do |color,index|
           text << ("$generated-color-#{index+1}: #" + color + ";" "\n")
         end
-        puts text
         puts
-        create_file "_color-constants.scss", text, force: true
-        if ask("< Enter > for next permutation, < q + Enter > for next theme:") == "q"
-          break
+        create_file "_generated-colors.scss", text, force: true, verbose: false
+        case ask("#{entry['title'].capitalize} by #{entry['userName'].capitalize}, permutation: " + i.to_s)
+        when "q"
+          return
+        when ""
+          break         
+        else
         end
-      end
-
-      if ask("< q > to quit") == "q"
-        break
       end
     end
   end
