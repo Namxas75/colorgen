@@ -1,6 +1,7 @@
 # Colorgen
 ## Generate an SCSS color theme
 
+
 ###Description
 
 Generates color themes based on a keyword.
@@ -47,6 +48,13 @@ Leave the script running while you preview your site, and simply press ```<Enter
 * ```< Enter > requests a new theme```
 * ```< p + Enter > to get next permutation```
 * ```< q > to quit:```
+
+###Examples
+
+![theme 1](https://raw.githubusercontent.com/Namxas75/colorgen/master/examples/theme1.png "Theme example 1")
+![theme 2](https://raw.githubusercontent.com/Namxas75/colorgen/master/examples/theme2.png "Theme example 2")
+![theme 3](https://raw.githubusercontent.com/Namxas75/colorgen/master/examples/theme3.png "Theme example 3")
+![theme 4](https://raw.githubusercontent.com/Namxas75/colorgen/master/examples/theme4.png "Theme example 4")
 
 Colorgen is powered by:
 
